@@ -22,7 +22,7 @@ export interface RecordResponse {
   providedIn: 'root'
 })
 export class Record {
-  private apiUrl = 'http://localhost:5000/api/records';
+  private apiUrl = 'https://secureflow-api-1lhe.onrender.com/api/records';
 
   constructor(private http: HttpClient) {}
 

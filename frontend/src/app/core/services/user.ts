@@ -22,7 +22,7 @@ export interface UsersResponse {
   providedIn: 'root'
 })
 export class User {
-  private apiUrl = 'http://localhost:5000/api/users';
+  private apiUrl = 'https://secureflow-api-1lhe.onrender.com/api/users';
 
   constructor(private http: HttpClient) {}
 

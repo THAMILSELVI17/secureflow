@@ -30,7 +30,7 @@ export interface LoginResponse {
 })
 export class Auth {
 
-  private apiUrl = 'http://localhost:5000/api/auth';
+  private apiUrl = 'https://secureflow-api-1lhe.onrender.com/api/auth';
 
   constructor(private http: HttpClient) {}
 
