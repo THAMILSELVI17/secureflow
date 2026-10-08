@@ -1,0 +1,281 @@
+<div class="dashboard">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+
+    <div class="logo">
+      <div class="logo-icon">S</div>
+      <span>SecureFlow</span>
+    </div>
+
+    <nav class="nav">
+
+      <button
+        class="nav-item active"
+        type="button"
+      >
+        <span>▣</span>
+        Dashboard
+      </button>
+
+      <button
+        class="nav-item"
+        type="button"
+      >
+        <span>▤</span>
+        Records
+      </button>
+
+      @if (user?.role === 'admin') {
+        <button
+          class="nav-item"
+          type="button"
+          (click)="goToUsers()"
+        >
+          <span>♙</span>
+          User Management
+        </button>
+      }
+
+    </nav>
+
+    <button
+      class="logout"
+      type="button"
+      (click)="logout()"
+    >
+      Logout
+    </button>
+
+  </aside>
+
+
+  <!-- Main Content -->
+  <main class="main">
+
+    <!-- Top Header -->
+    <header class="topbar">
+
+      <div>
+        <h1>Dashboard</h1>
+
+        <p>
+          Welcome back, {{ user?.name }}
+        </p>
+      </div>
+
+      <div class="profile">
+
+        <div class="avatar">
+          {{ user?.name?.charAt(0)?.toUpperCase() }}
+        </div>
+
+        <div>
+          <strong>{{ user?.name }}</strong>
+
+          <span>
+            {{ user?.role === 'admin' ? 'Administrator' : 'General User' }}
+          </span>
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <!-- User Information -->
+    <section class="user-card">
+
+      <div class="info-item">
+        <span>User ID</span>
+        <strong>{{ user?.userId }}</strong>
+      </div>
+
+      <div class="info-item">
+        <span>Email</span>
+        <strong>{{ user?.email }}</strong>
+      </div>
+
+      <div class="info-item">
+        <span>Role</span>
+        <strong class="capitalize">
+          {{ user?.role }}
+        </strong>
+      </div>
+
+      <div class="info-item">
+        <span>Access Level</span>
+        <strong class="capitalize">
+          {{ user?.accessLevel }}
+        </strong>
+      </div>
+
+    </section>
+
+
+    <!-- Records -->
+    <section class="records-section">
+
+      <div class="section-header">
+
+        <div>
+          <h2>Accessible Records</h2>
+
+          <p>
+            Records available according to your access level
+          </p>
+        </div>
+
+        @if (!loading && !errorMessage) {
+          <span class="record-count">
+            {{ records.length }}
+            {{ records.length === 1 ? 'Record' : 'Records' }}
+          </span>
+        }
+
+      </div>
+
+
+      <!-- Loading -->
+      @if (loading) {
+
+        <div class="loading">
+
+          <div class="spinner"></div>
+
+          <p>Loading records...</p>
+
+          <span>
+            Fetching secure data from the server
+          </span>
+
+        </div>
+
+      }
+
+
+      <!-- Error -->
+      @if (!loading && errorMessage) {
+
+        <div class="error-message">
+
+          <div class="error-icon">!</div>
+
+          <div>
+            <strong>Unable to load records</strong>
+
+            <p>{{ errorMessage }}</p>
+
+            <button
+              type="button"
+              class="retry-button"
+              (click)="loadRecords()"
+            >
+              Try Again
+            </button>
+          </div>
+
+        </div>
+
+      }
+
+
+      <!-- Empty -->
+      @if (!loading && !errorMessage && records.length === 0) {
+
+        <div class="empty">
+
+          <div class="empty-icon">▤</div>
+
+          <h3>No records available</h3>
+
+          <p>
+            There are currently no records available
+            for your access level.
+          </p>
+
+        </div>
+
+      }
+
+
+      <!-- Records Table -->
+      @if (!loading && !errorMessage && records.length > 0) {
+
+        <div class="table-container">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Record ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Owner</th>
+                <th>Access</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              @for (record of records; track record._id) {
+
+                <tr>
+
+                  <td>
+                    <strong class="record-id">
+                      {{ record.recordId }}
+                    </strong>
+                  </td>
+
+                  <td>
+                    <strong>
+                      {{ record.title }}
+                    </strong>
+                  </td>
+
+                  <td class="description">
+                    {{ record.description }}
+                  </td>
+
+                  <td>
+                    {{ record.ownerId }}
+                  </td>
+
+                  <td>
+                    <span class="badge access">
+                      {{ record.accessLevel }}
+                    </span>
+                  </td>
+
+                  <td>
+
+                    <span
+                      class="badge"
+                      [class.active]="record.status === 'active'"
+                      [class.pending]="record.status === 'pending'"
+                      [class.archived]="record.status === 'archived'"
+                    >
+                      {{ record.status }}
+                    </span>
+
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      }
+
+    </section>
+
+  </main>
+
+</div>
